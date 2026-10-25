@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-commerce Groupe 20F</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI', Arial, sans-serif}
+body{background:#f2f2f2}
+.site{padding:16px;max-width:1150px;margin:auto}
+
+/* MENU HAUT */
+.top{display:flex;align-items:center;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.carre{background:white;padding:11px 18px;border-radius:12px;font-weight:900;cursor:pointer;font-size:12px;border:1px solid #ddd;box-shadow:0 2px 6px rgba(0,0,0,0.04);transition:0.2s}
+.carre:hover{transform:translateY(-1px)}
+.carre.active{background:#111;color:white;box-shadow:0 4px 12px rgba(0,0,0,0.2)}
+.count{margin-left:auto;font-weight:900;background:#111;color:white;padding:8px 16px;border-radius:20px;font-size:14px}
+
+/* ACCUEIL - CÔTE À CÔTE */
+#page-accueil.main{display:flex;gap:20px;background:linear-gradient(135deg,#f3a84a,#f7c17a);padding:24px;border-radius:18px;align-items:center}
+.left{width:42%;background:#7ec8e6;padding:32px 26px;border-radius:16px;box-shadow:0 8px 20px rgba(0,0,0,0.1)}
+.left h1{font-size:56px;font-weight:900;line-height:0.85;letter-spacing:-1px}
+.left p{margin-top:14px;font-weight:700;font-size:14px}
+.right{width:58%}
+.right img{width:100%;height:430px;object-fit:cover;border-radius:16px;background:white;display:block;box-shadow:0 8px 20px rgba(0,0,0,0.15)}
+
+/* PAGES GENERALES */
+.page{display:none;background:white;padding:26px;border-radius:18px;margin-top:10px;box-shadow:0 6px 20px rgba(0,0,0,0.06)}
+.page.show{display:block}
+.page h2{font-weight:900;letter-spacing:-0.5px}
+
+/* PRODUIT - BEAU ET PRO */
+.produits-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
+.card{border:1px solid #f0f0f0;border-radius:16px;overflow:hidden;background:white;box-shadow:0 4px 12px rgba(0,0,0,0.05);transition:0.25s}
+.card:hover{transform:translateY(-4px);box-shadow:0 12px 24px rgba(0,0,0,0.1)}
+.card img{width:100%;height:195px;object-fit:cover;background:#f9f9f9}
+.card-info{padding:14px}
+.card-info h3{font-size:14px;font-weight:800}
+.card-info .prix{font-weight:900;margin-top:6px;color:#111;font-size:14px}
+.card-info button{width:100%;margin-top:12px;padding:10px;background:#111;color:white;border:none;border-radius:10px;font-weight:800;cursor:pointer;transition:0.2s}
+.card-info button:hover{background:#333}
+
+/* COMMANDE - BEAU AVEC FACTURE */
+.commande-header{display:flex;justify-content:space-between;align-items:center}
+.badge{background:#f3a84a;color:#111;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:900}
+.table{width:100%;border-collapse:separate;border-spacing:0;margin-top:18px;border:1px solid #f0f0f0;border-radius:14px;overflow:hidden}
+.table th{background:#111;color:white;padding:13px 12px;font-size:12px;text-align:left}
+.table td{padding:13px 12px;font-size:13px;border-bottom:1px solid #f5f5f5}
+.table tfoot td{background:#f9f9f9;font-weight:900;font-size:14px;border-top:2px solid #111}
+.btn-valider{margin-top:18px;padding:14px;background:#111;color:white;border:none;border-radius:12px;font-weight:900;cursor:pointer;width:100%;font-size:14px}
+.btn-suppr{background:#ff3b30;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-weight:800}
+.vide-msg{margin-top:20px;padding:30px;text-align:center;background:#fafafa;border:2px dashed #ddd;border-radius:14px;color:#888}
+
+/* UTILISATEUR - BEAU */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+.box{border:1px solid #eee;padding:18px;border-radius:16px;background:linear-gradient(180deg,#fafafa,#fff);box-shadow:0 4px 12px rgba(0,0,0,0.04)}
+.box h3{font-size:11px;margin-bottom:14px;background:#111;color:white;padding:8px 12px;border-radius:8px;display:inline-block;letter-spacing:0.5px}
+.box input{width:100%;padding:12px;margin-bottom:12px;border:1.5px solid #e5e5e5;border-radius:10px;font-size:13px;outline:none;transition:0.2s}
+.box input:focus{border-color:#7ec8e6;box-shadow:0 0 0 3px rgba(126,200,230,0.2)}
+.box button{width:100%;padding:12px;background:#7ec8e6;border:none;border-radius:10px;font-weight:900;cursor:pointer;transition:0.2s}
+.box button:hover{background:#6ab8d6}
+.list{margin-top:14px;font-size:12px;background:white;padding:10px;border-radius:10px;min-height:50px;border:1px solid #f0f0f0}
+</style>
+</head>
+<body>
+<div class="site">
+  <div class="top">
+    <div class="carre" id="btn-commande" onclick="showPage('commande')">COMMANDE</div>
+    <div class="carre" id="btn-produit" onclick="showPage('produit')">PRODUIT</div>
+    <div class="carre active" id="btn-accueil" onclick="showPage('accueil')">ACCUEIL</div>
+    <div class="carre" id="btn-utilisateur" onclick="showPage('utilisateur')">UTILISATEUR</div>
+    <div class="count">e-com(<span id="count">0</span>)</div>
+  </div>
+
+  <!-- ACCUEIL -->
+  <div id="page-accueil" class="main show">
+    <div class="left">
+      <h1>e-<br>commerce</h1>
+      <p>Choisissez le produit<br><span style="font-size:11px;font-weight:400;opacity:0.8">Même design que ton image du début</span></p>
+      <button onclick="showPage('produit')" style="margin-top:20px;width:100%;padding:13px;background:white;border:1.5px solid black;border-radius:10px;font-weight:900;cursor:pointer">Voir plus →</button>
+    </div>
+    <div class="right"><img src="image/canapemarron.png" alt="canape marron"></div>
+  </div>
+
+  <!-- PRODUIT -->
+  <div id="page-produit" class="page">
+    <h2>NOS PRODUITS</h2>
+    <div class="produits-grid">
+      <div class="card"><img src="image/canapemarron.png"><div class="card-info"><h3>Canapé Marron</h3><div class="prix">$150,23 • 95.000 FCFA</div><button onclick="ajouterPanier('Canapé Marron',150.23)">Ajouter au panier</button></div></div>
+      <div class="card"><img src="image/canapegris.png" alt="canapé"><div class="card-info"><h3>Canapé Gris</h3><div class="prix">$130,00 • 85.000 FCFA</div><button onclick="ajouterPanier('Canapé Gris',130)">Ajouter au panier</button></div></div>
+      <div class="card"><img src="image/chaise.png"><div class="card-info"><h3>Chaise Design</h3><div class="prix">$45,00 • 30.000 FCFA</div><button onclick="ajouterPanier('Chaise',45)">Ajouter au panier</button></div></div>
+      <div class="card"><img src="image/fauteil.png" alt="fauteil"><div class="card-info"><h3>Fauteuil Confort</h3><div class="prix">$89,99 • 60.000 FCFA</div><button onclick="ajouterPanier('Fauteuil',89.99)">Ajouter au panier</button></div></div>
+      <div class="card"><img src="image/tablebase.png"><div class="card-info"><h3>Table Basse</h3><div class="prix">$110,00 • 72.000 FCFA</div><button onclick="ajouterPanier('Table Basse',110)">Ajouter au panier</button></div></div>
+      <div class="card"><img src="image/lampe.png"><div class="card-info"><h3>Lampe Moderne</h3><div class="prix">$25,50 • 18.000 FCFA</div><button onclick="ajouterPanier('Lampe',25.5)">Ajouter au panier</button></div></div>
+    </div>
+  </div>
+
+  <!-- COMMANDE AVEC FACTURE -->
+  <div id="page-commande" class="page">
+    <div class="commande-header">
+      <h2>COMMANDE / FACTURE</h2>
+      <span class="badge" id="badge-count">0 article</span>
+    </div>
+    <div id="vide" class="vide-msg">🛒 Panier vide<br><span style="font-size:12px">Va dans PRODUIT et clique sur Ajouter au panier</span></div>
+    <table class="table" id="table-commande" style="display:none">
+      <thead><tr><th>Produit</th><th>Qté</th><th>Prix Unit.</th><th>Total</th><th></th></tr></thead>
+      <tbody id="tbody-commande"></tbody>
+      <tfoot><tr><td colspan="3" style="text-align:right">FACTURE TOTALE</td><td id="total-general">$0</td><td></td></tr></tfoot>
+    </table>
+    <button class="btn-valider" id="btn-payer" style="display:none" onclick="payer()">✓ Valider et Payer <span id="total-btn"></span></button>
+  </div>
+
+  <!-- UTILISATEUR AVEC ENREGISTREMENT -->
+  <div id="page-utilisateur" class="page">
+    <h2>PAGE UTILISATEUR</h2>
+    <p style="font-size:12px;color:#666;margin-top:4px">Client + Utilisateur et Fournisseur</p>
+    <div class="form-grid">
+      <div class="box">
+        <h3>Table CLIENT + UTILISATEUR</h3>
+        <input id="client-nom" placeholder="Nom complet">
+        <input id="client-email" placeholder="Email - ex: mouaffomiguel33@gmail.com">
+        <button onclick="enregistrerClient()">Enregistrer Client</button>
+        <div class="list" id="liste-client">Aucun client</div>
+      </div>
+      <div class="box">
+        <h3>Table FOURNISSEUR</h3>
+        <input id="four-nom" placeholder="Nom fournisseur">
+        <input id="four-produit" placeholder="Produit fourni">
+        <button onclick="enregistrerFournisseur()">Enregistrer Fournisseur</button>
+        <div class="list" id="liste-four">Aucun fournisseur</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let panier = JSON.parse(localStorage.getItem('panier') || '[]');
+let clients = JSON.parse(localStorage.getItem('clients') || '[]');
+let fournisseurs = JSON.parse(localStorage.getItem('fournisseurs') || '[]');
+
+function ajouterPanier(nom, prix){
+  let exist = panier.find(p => p.nom === nom);
+  if(exist){ exist.qte++; } else { panier.push({nom:nom, prix:prix, qte:1}); }
+  localStorage.setItem('panier', JSON.stringify(panier));
+  updatePanier();
+  alert(nom + ' ajouté !');
+}
+function updatePanier(){
+  let totalQte = panier.reduce((s,p)=>s+p.qte,0);
+  document.getElementById('count').innerText = totalQte;
+  document.getElementById('badge-count').innerText = totalQte + ' article(s)';
+  let tbody = document.getElementById('tbody-commande');
+  let total = 0;
+  tbody.innerHTML = '';
+  panier.forEach((p, i)=>{
+    let ligneTotal = p.prix * p.qte;
+    total += ligneTotal;
+    tbody.innerHTML += `<tr><td>${p.nom}</td><td>${p.qte}</td><td>$${p.prix}</td><td>$${ligneTotal.toFixed(2)}</td><td><button class="btn-suppr" onclick="supprimer(${i})">X</button></td></tr>`;
+  });
+  document.getElementById('total-general').innerText = '$' + total.toFixed(2);
+  document.getElementById('total-btn').innerText = '- $' + total.toFixed(2);
+  if(panier.length>0){
+    document.getElementById('vide').style.display='none';
+    document.getElementById('table-commande').style.display='table';
+    document.getElementById('btn-payer').style.display='block';
+  } else {
+    document.getElementById('vide').style.display='block';
+    document.getElementById('table-commande').style.display='none';
+    document.getElementById('btn-payer').style.display='none';
+  }
+}
+function supprimer(i){ panier.splice(i,1); localStorage.setItem('panier', JSON.stringify(panier)); updatePanier(); }
+function payer(){ alert('Facture totale: ' + document.getElementById('total-general').innerText + '\nCommande validée !'); panier=[]; localStorage.removeItem('panier'); updatePanier(); showPage('accueil'); }
+
+// UTILISATEUR
+function enregistrerClient(){
+  let nom = document.getElementById('client-nom').value.trim();
+  let email = document.getElementById('client-email').value.trim();
+  if(!nom || !email){ alert('Remplis Nom et Email !'); return; }
+  clients.push({nom,email}); localStorage.setItem('clients', JSON.stringify(clients));
+  afficherClients(); document.getElementById('client-nom').value=''; document.getElementById('client-email').value='';
+}
+function enregistrerFournisseur(){
+  let nom = document.getElementById('four-nom').value.trim();
+  let produit = document.getElementById('four-produit').value.trim();
+  if(!nom){ alert('Remplis Nom fournisseur !'); return; }
+  fournisseurs.push({nom,produit}); localStorage.setItem('fournisseurs', JSON.stringify(fournisseurs));
+  afficherFournisseurs(); document.getElementById('four-nom').value=''; document.getElementById('four-produit').value='';
+}
+function afficherClients(){
+  let div = document.getElementById('liste-client');
+  if(clients.length===0){ div.innerHTML='Aucun client'; return; }
+  div.innerHTML = clients.map(c=>'✓ <b>'+c.nom+'</b> - '+c.email).join('<br>');
+}
+function afficherFournisseurs(){
+  let div = document.getElementById('liste-four');
+  if(fournisseurs.length===0){ div.innerHTML='Aucun fournisseur'; return; }
+  div.innerHTML = fournisseurs.map(f=>'✓ <b>'+f.nom+'</b> - '+(f.produit||'')).join('<br>');
+}
+function showPage(nom){
+  document.querySelectorAll('.page, .main').forEach(p=>{p.classList.remove('show');p.style.display='none';});
+  document.querySelectorAll('.carre').forEach(b=>b.classList.remove('active'));
+  const target = document.getElementById('page-'+nom);
+  if(nom==='accueil'){target.style.display='flex';} else {target.style.display='block';}
+  target.classList.add('show'); document.getElementById('btn-'+nom).classList.add('active');
+}
+updatePanier(); afficherClients(); afficherFournisseurs(); showPage('accueil');
+</script>
+</body>
+</html>
